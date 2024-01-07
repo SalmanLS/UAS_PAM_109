@@ -22,13 +22,10 @@ interface UserRepository {
 
     fun getUserById(userId: String): Flow<User>
 
-    fun getUserId(): String?
+
 }
 
 class UserRepositoryImpl(private val firestore: FirebaseFirestore) : UserRepository {
-
-    private var currentUserId: String? = null
-
     override fun getAll(): Flow<List<User>> = flow {
         val snapshot =
             firestore.collection("User")
@@ -40,11 +37,9 @@ class UserRepositoryImpl(private val firestore: FirebaseFirestore) : UserReposit
     }.flowOn(Dispatchers.IO)
 
     override suspend fun save(user: User): String {
+
         return try {
             val documentReference = firestore.collection("User").add(user).await()
-
-            currentUserId = documentReference.id
-
             firestore.collection("User").document(documentReference.id).set(user.copy( idUser = documentReference.id ))
             "Berhasil + ${documentReference.id}"
         }catch (e:Exception){
@@ -69,7 +64,4 @@ class UserRepositoryImpl(private val firestore: FirebaseFirestore) : UserReposit
         }.flowOn(Dispatchers.IO)
     }
 
-    override fun getUserId(): String? {
-        return currentUserId
-    }
 }

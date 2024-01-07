@@ -3,6 +3,7 @@ package com.example.uas_pam.data
 import android.content.ContentValues
 import android.util.Log
 import com.example.uas_pam.model.Imt
+import com.example.uas_pam.model.User
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +30,7 @@ class ImtRepositoryImpl(
 ): ImtRepository{
     override suspend fun save(imt: Imt): String {
         return try {
-            val currentUserId = userRepository.getUserId()!!
+            val currentUserId = userRepository.save(User())
             val documentReference = firestore.collection("Imt").add(imt).await()
 
             firestore.collection("Imt").document(documentReference.id)

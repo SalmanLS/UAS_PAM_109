@@ -46,10 +46,3 @@ fun DetailImt.toImt(): Imt = Imt(
     imtClass = imt
 )
 
-fun Imt.toDetailImt(): DetailImt = DetailImt(
-    id = idData,
-    userId = idUser,
-    bb = bbUser,
-    tb = tbUser,
-    imt = imtClass
-)

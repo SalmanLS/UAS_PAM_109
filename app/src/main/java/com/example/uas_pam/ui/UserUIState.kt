@@ -21,10 +21,5 @@ fun DetailUser.toUser(): User = User(
     umurUser = umur
 )
 
-fun User.toDetailUser(): DetailUser = DetailUser(
-    id = idUser,
-    nama = namaUser,
-    jenisk = jeniskUser,
-    umur = umurUser
-)
+
 
