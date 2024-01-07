@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "548688484744",
+    "project_id": "uaspam-a704d",
+    "storage_bucket": "uaspam-a704d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:548688484744:android:db61d502273c4c1cbd023d",
+        "android_client_info": {
+          "package_name": "com.example.uas_pam"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIFizpFcY-vR1G0i6J4eq8sYKhTuyGv_A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
