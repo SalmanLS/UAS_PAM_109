@@ -25,6 +25,7 @@ import com.example.uas_pam.PenyediaViewModel
 import com.example.uas_pam.navigation.DestinasiNavigasi
 import com.example.uas_pam.ui.DetailImt
 import com.example.uas_pam.ui.DetailUser
+import com.example.uas_pam.ui.ImtTopAppBar
 import com.example.uas_pam.ui.ImtUIState
 import com.example.uas_pam.ui.UserUIState
 import kotlinx.coroutines.delay
@@ -48,14 +49,14 @@ fun AddUserScreen(
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-//        topBar = {
-//            SiswaTopAppBar(
-//                title = DestinasiEntry.titleRes,
-//                canNavigateBack = true,
-//                scrollBehavior = scrollBehavior,
-//                navigateUp = navigateBack
-//            )
-//        }
+        topBar = {
+            ImtTopAppBar(
+                title = DestinasiAdd.titleRes,
+                canNavigateBack = true,
+                scrollBehavior = scrollBehavior,
+                navigateUp = navigateBack
+            )
+        }
     ) { innerPadding ->
 
         AddBody(
