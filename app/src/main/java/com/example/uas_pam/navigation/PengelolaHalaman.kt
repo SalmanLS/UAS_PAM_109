@@ -1,7 +1,9 @@
 package com.example.uas_pam.navigation
 
+import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,7 +16,7 @@ import com.example.uas_pam.ui.home.HalamanFirst
 import com.example.uas_pam.ui.home.HomeScreen
 
 @Composable
-fun PengelolaHalaman(navController: NavHostController = rememberNavController()){
+fun PengelolaHalaman(navController: NavHostController = rememberNavController(), modifier: Modifier = Modifier){
     NavHost(
         navController = navController,
         startDestination = DestinasiFirst.route,
