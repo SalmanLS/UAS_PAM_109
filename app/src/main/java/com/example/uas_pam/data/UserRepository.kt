@@ -37,11 +37,10 @@ class UserRepositoryImpl(private val firestore: FirebaseFirestore) : UserReposit
     }.flowOn(Dispatchers.IO)
 
     override suspend fun save(user: User): String {
-
         return try {
             val documentReference = firestore.collection("User").add(user).await()
             firestore.collection("User").document(documentReference.id).set(user.copy( idUser = documentReference.id ))
-            "Berhasil + ${documentReference.id}"
+            documentReference.id
         }catch (e:Exception){
             Log.w(ContentValues.TAG,"Error adding document",e)
             "Gagal $e"

@@ -16,7 +16,7 @@ class AplikasiContainer: AppContainer{
     }
 
     override val imtRepository: ImtRepository by lazy {
-        ImtRepositoryImpl(firestore, userRepository)
+        ImtRepositoryImpl(firestore)
     }
 
 }

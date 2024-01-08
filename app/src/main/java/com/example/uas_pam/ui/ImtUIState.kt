@@ -1,6 +1,7 @@
 package com.example.uas_pam.ui
 
 import com.example.uas_pam.model.Imt
+import com.example.uas_pam.model.User
 
 
 data class ImtUIState(
@@ -13,7 +14,7 @@ data class DetailImt(
     val userId: String = "",
     val bb: Long = 0,
     val tb: Long = 0,
-    val imt: String = ""
+    var imt: String = ""
 ){
     fun findImt(): Double{
         val bbDouble = bb.toDouble()
@@ -44,5 +45,10 @@ fun DetailImt.toImt(): Imt = Imt(
     bbUser = bb,
     tbUser = tb,
     imtClass = imt
+)
+
+data class allData(
+    val alldata: List<Pair<Imt, User?>> = emptyList(),
+    val dataLength: Int = 0
 )
 

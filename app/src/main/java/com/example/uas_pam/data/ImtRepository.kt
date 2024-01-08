@@ -5,7 +5,6 @@ import android.util.Log
 import com.example.uas_pam.model.Imt
 import com.example.uas_pam.model.User
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -21,20 +20,15 @@ interface ImtRepository{
 
     suspend fun delete(imtId: String)
 
-    fun getAll(): Flow<List<Imt>>
+    fun getAllWithUser(): Flow<List<Pair<Imt,User?>>>
 }
 
-class ImtRepositoryImpl(
-    private val firestore: FirebaseFirestore,
-    private val userRepository: UserRepository
-): ImtRepository{
+class ImtRepositoryImpl(private val firestore: FirebaseFirestore): ImtRepository{
     override suspend fun save(imt: Imt): String {
         return try {
-            val currentUserId = userRepository.save(User())
             val documentReference = firestore.collection("Imt").add(imt).await()
-
             firestore.collection("Imt").document(documentReference.id)
-                .set(imt.copy(idData = documentReference.id, idUser = currentUserId))
+                .set(imt.copy(idData = documentReference.id))
             "Berhasil + ${documentReference.id}"
         }catch (e: Exception){
             Log.w(ContentValues.TAG,"Error adding document",e)
@@ -50,13 +44,16 @@ class ImtRepositoryImpl(
         firestore.collection("Imt").document(imtId).delete().await()
     }
 
-    override fun getAll(): Flow<List<Imt>> = flow {
-        val snapshot = firestore.collection("Imt")
-            .orderBy("imtUser", Query.Direction.ASCENDING)
-            .get()
-            .await()
-        val imt = snapshot.toObjects(Imt::class.java)
-        emit(imt)
+    override fun getAllWithUser(): Flow<List<Pair<Imt, User?>>> = flow{
+
+            val snapshotImt = firestore.collection("Imt").get().await()
+            val listImt = snapshotImt.toObjects(Imt::class.java)
+
+            val snapshotUser = firestore.collection("User").get().await()
+            val listUser = snapshotUser.toObjects(User::class.java)
+
+            val listResult = listImt.map { imt -> Pair(imt, listUser.find { it.idUser == imt.idUser }) }
+            emit(listResult)
     }.flowOn(Dispatchers.IO)
 
 }
