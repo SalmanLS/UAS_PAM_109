@@ -1,7 +1,6 @@
 package com.example.uas_pam.ui
 
 import com.example.uas_pam.model.Imt
-import com.example.uas_pam.model.User
 
 
 data class ImtUIState(
@@ -47,8 +46,25 @@ fun DetailImt.toImt(): Imt = Imt(
     imtClass = imt
 )
 
-data class allData(
-    val alldata: List<Pair<Imt, User?>> = emptyList(),
+data class HomeUIState(
+    val alldata: List<AllData> = listOf(),
     val dataLength: Int = 0
 )
+
+//untuk menampung data gabungan
+data class AllData(
+    val idData: String,
+    val namaUser: String,
+    val jeniskUser: String,
+    val umurUser: String,
+    val bbUser: Long,
+    val tbUser: Long,
+    val imtClass: String
+){
+    constructor(): this("","","","",0,0,"")
+}
+
+
+
+
 

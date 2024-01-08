@@ -10,7 +10,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.uas_pam.navigation.PengelolaHalaman
+import com.example.uas_pam.ui.ImtApp
 import com.example.uas_pam.ui.add.AddUserScreen
+import com.example.uas_pam.ui.home.HomeScreen
 import com.example.uas_pam.ui.theme.UAS_PAMTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AddUserScreen(navigateBack = { /*TODO*/ })
+                    ImtApp()
                 }
             }
         }

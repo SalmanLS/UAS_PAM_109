@@ -4,11 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.uas_pam.data.ImtRepository
 import com.example.uas_pam.model.Imt
-import com.example.uas_pam.ui.allData
+import com.example.uas_pam.ui.AllData
+import com.example.uas_pam.ui.HomeUIState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
@@ -24,13 +27,34 @@ class HomeViewModel(private val imtRepository: ImtRepository): ViewModel() {
         private const val TIMEOUT_MILLIS = 5_000L
     }
 
-    val homeUIState : StateFlow<allData> = imtRepository.getAllWithUser()
+    val allDataListFlow: Flow<List<AllData>> = imtRepository.getAllWithUser()
+        .map { pairsList ->
+            pairsList.mapNotNull { (imt, user) ->
+                if (user != null) {
+                    AllData(
+                        idData = imt.idData,
+                        namaUser = user.namaUser,
+                        jeniskUser = user.jeniskUser,
+                        umurUser = user.umurUser,
+                        bbUser = imt.bbUser,
+                        tbUser = imt.tbUser,
+                        imtClass = imt.imtClass
+                    )
+                } else {
+                    null
+                }
+            }
+        }.flowOn(Dispatchers.IO)
+
+    val homeUIState: StateFlow<HomeUIState> = allDataListFlow
         .filterNotNull()
-        .map { allData(alldata = it.toList(),it.size) }
+        .map {
+            HomeUIState(alldata = it.toList(), it.size)
+        }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = allData()
+            initialValue = HomeUIState()
         )
 
 }

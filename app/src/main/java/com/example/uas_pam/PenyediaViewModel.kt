@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.uas_pam.ui.add.AddViewModel
+import com.example.uas_pam.ui.home.HomeViewModel
 
 fun CreationExtras.imtApplication(): ImtApplication =
     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as ImtApplication)
@@ -16,6 +17,10 @@ object PenyediaViewModel {
                 imtApplication().container.userRepository,
                 imtApplication().container.imtRepository
             )
+        }
+
+        initializer {
+            HomeViewModel(imtApplication().container.imtRepository)
         }
     }
 }
