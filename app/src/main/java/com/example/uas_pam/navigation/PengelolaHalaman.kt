@@ -8,7 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.uas_pam.ui.add.AddUserScreen
+import com.example.uas_pam.model.JenisKelamin.jk
+import com.example.uas_pam.ui.add.AddScreen
 import com.example.uas_pam.ui.add.DestinasiAdd
 import com.example.uas_pam.ui.detail.DetailDestination
 import com.example.uas_pam.ui.detail.DetailScreen
@@ -45,7 +46,7 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
         composable(
             DestinasiAdd.route
         ){
-            AddUserScreen(navigateBack = {navController.popBackStack()})
+            AddScreen(navigateBack = {navController.popBackStack()}, pilihanJk = jk)
         }
 
         composable(
@@ -75,7 +76,8 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
             imtId?.let {
                 EditScreen(
                     navigateBack = { navController.popBackStack() },
-                    onNavigateUp = { navController.navigateUp() }
+                    onNavigateUp = { navController.navigateUp() },
+                    pilihanJk = jk
                 )
             }
         }

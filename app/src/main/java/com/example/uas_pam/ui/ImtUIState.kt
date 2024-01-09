@@ -31,10 +31,10 @@ data class DetailImt(
     fun determineImt(): String {
         val imtValue = findImt()
         return when {
-            imtValue < 18.5 -> "Underweight"
-            imtValue < 24.9 -> "Normal Weight"
-            imtValue < 29.9 -> "Overweight"
-            else -> "Obese"
+            imtValue < 18.5 -> "Kurus"
+            imtValue < 24.9 -> "Normal"
+            imtValue < 29.9 -> "Gemuk"
+            else -> "Obesitas"
         }
     }
 }

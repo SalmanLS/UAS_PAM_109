@@ -30,7 +30,9 @@ fun EditScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: EditViewModel = viewModel(factory = PenyediaViewModel.Factory)
+    viewModel: EditViewModel = viewModel(factory = PenyediaViewModel.Factory),
+    pilihanJk: List<String>
+
 ) {
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
@@ -59,7 +61,8 @@ fun EditScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            jk = pilihanJk
         )
     }
 }

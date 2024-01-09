@@ -1,27 +1,40 @@
 package com.example.uas_pam.ui.add
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.uas_pam.PenyediaViewModel
+import com.example.uas_pam.R
 import com.example.uas_pam.navigation.DestinasiNavigasi
 import com.example.uas_pam.ui.DetailImt
 import com.example.uas_pam.ui.DetailUser
@@ -31,19 +44,20 @@ import com.example.uas_pam.ui.UserUIState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-object DestinasiAdd : DestinasiNavigasi{
+object DestinasiAdd : DestinasiNavigasi {
     override val route = "add_"
     override val titleRes = "Add Data"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddUserScreen(
+fun AddScreen(
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     addViewModel: AddViewModel = viewModel(factory = PenyediaViewModel.Factory),
+    pilihanJk: List<String>
 
-    ) {
+) {
     val coroutineScope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
@@ -75,18 +89,21 @@ fun AddUserScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            jk = pilihanJk
         )
     }
 }
+
 @Composable
 fun AddBody(
     userUIState: UserUIState,
     imtUIState: ImtUIState,
     onUserValueChange: (DetailUser) -> Unit,
-    onImtValueChange : (DetailImt) -> Unit,
+    onImtValueChange: (DetailImt) -> Unit,
     onSaveClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    jk: List<String>
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -95,13 +112,15 @@ fun AddBody(
         FormInputUser(
             detailUser = userUIState.detailUser,
             onValueChange = onUserValueChange,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            pilihanJk = jk
         )
         FormInputImt(
             detailImt = imtUIState.detailImt,
             onValueChange = onImtValueChange,
-            modifier = Modifier.fillMaxWidth()
-        )
+            modifier = Modifier.fillMaxWidth(),
+
+            )
         Button(
             onClick = onSaveClick,
             shape = MaterialTheme.shapes.small,
@@ -111,14 +130,17 @@ fun AddBody(
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormInputUser(
+    pilihanJk: List<String>,
     detailUser: DetailUser,
     modifier: Modifier = Modifier,
     onValueChange: (DetailUser) -> Unit = {},
     enabled: Boolean = true
 ) {
+    var jenisk by rememberSaveable { mutableStateOf("") }
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -131,14 +153,39 @@ fun FormInputUser(
             enabled = enabled,
             singleLine = true
         )
-        OutlinedTextField(
-            value = detailUser.jenisk,
-            onValueChange = { onValueChange(detailUser.copy(jenisk = it)) },
-            label = { Text("Jenis Kelamin") },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
+//        OutlinedTextField(
+//            value = detailUser.jenisk,
+//            onValueChange = { onValueChange(detailUser.copy(jenisk = it)) },
+//            label = { Text("Jenis Kelamin") },
+//            modifier = Modifier.fillMaxWidth(),
+//            enabled = enabled,
+//            singleLine = true
+//        )
+
+        Text(text = "Jenis Kelamin :")
+        pilihanJk.forEach { item ->
+                Row(
+                    modifier = Modifier.selectable(
+                        selected = jenisk == item,
+                        onClick = {
+                            jenisk = item
+                            onValueChange(detailUser.copy(jenisk = item))
+                        }
+                    ),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(
+                        selected = jenisk == item,
+                        onClick = {
+                            jenisk = item
+                            onValueChange(detailUser.copy(jenisk = item))
+                        }
+                    )
+                    Text(item)
+                }
+
+        }
+
         OutlinedTextField(
             value = detailUser.umur,
             onValueChange = { onValueChange(detailUser.copy(umur = it)) },
@@ -151,41 +198,43 @@ fun FormInputUser(
 
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormInputImt(
     detailImt: DetailImt,
     modifier: Modifier = Modifier,
     onValueChange: (DetailImt) -> Unit = {},
-    enabled: Boolean = true
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        OutlinedTextField(
-            value = detailImt.bb.toString(),
-            onValueChange = {
-                val newValue = if (it.isNotBlank()) it.toLong() else 0L
-                onValueChange(detailImt.copy(bb = newValue))
-            },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            label = { Text("Berat Badan") },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
-        OutlinedTextField(
-            value = detailImt.tb.toString(),
-            onValueChange = {
-                val newValue = if (it.isNotBlank()) it.toLong() else 0L
-                onValueChange(detailImt.copy(tb = newValue))
-            },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            label = { Text("Tinggi Badan") },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
+    val image = painterResource(id = R.drawable.body)
+
+    Row {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            OutlinedTextField(
+                value = detailImt.tb.toString(),
+                onValueChange = {
+                    val newValue = if (it.isNotBlank()) it.toLong() else 0L
+                    onValueChange(detailImt.copy(tb = newValue))
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                label = { Text("Tinggi Badan") },
+                singleLine = true
+            )
+            OutlinedTextField(
+                value = detailImt.bb.toString(),
+                onValueChange = {
+                    val newValue = if (it.isNotBlank()) it.toLong() else 0L
+                    onValueChange(detailImt.copy(bb = newValue))
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                label = { Text("Berat Badan") },
+                singleLine = true
+            )
+
+        }
+        Image(painter = image, contentDescription = "", modifier = Modifier.size(160.dp))
     }
+
 }
