@@ -1,6 +1,7 @@
 package com.example.uas_pam.ui
 
 import com.example.uas_pam.model.Imt
+import com.example.uas_pam.model.User
 
 
 data class ImtUIState(
@@ -14,20 +15,20 @@ data class DetailImt(
     val bb: Long = 0,
     val tb: Long = 0,
     var imt: String = ""
-){
-    fun findImt(): Double{
+) {
+    fun findImt(): Double {
         val bbDouble = bb.toDouble()
         val tbDouble = tb.toDouble() / 100
 
-        return if (tbDouble != 0.0){
+        return if (tbDouble != 0.0) {
             bbDouble / (tbDouble * tbDouble)
-        } else{
+        } else {
             0.0
         }
 
     }
 
-    fun determineImt(): String{
+    fun determineImt(): String {
         val imtValue = findImt()
         return when {
             imtValue < 18.5 -> "Underweight"
@@ -51,6 +52,60 @@ data class HomeUIState(
     val dataLength: Int = 0
 )
 
+
+fun Imt.toDetailImt(): DetailImt =
+    DetailImt(
+        id = idData,
+        userId = idUser,
+        bb = bbUser,
+        tb = tbUser,
+        imt = imtClass
+    )
+
+
+fun Imt.toImtUIState(): ImtUIState = ImtUIState(
+    detailImt = this.toDetailImt()
+)
+
+data class DetailUIState(
+    val allDataUi: AllDataUi = AllDataUi()
+)
+
+data class AllDataUi(
+    val id: String = "",
+    val nama: String = "",
+    val jenisk: String = "",
+    val umur: String = "",
+    val bb: Long = 0,
+    val tb: Long = 0,
+    val imt: String = ""
+)
+
+
+
+fun AllData.toAllDataUi(): AllDataUi =
+    AllDataUi(
+        id = idData,
+        nama = namaUser,
+        jenisk = jeniskUser,
+        umur = umurUser,
+        bb = bbUser,
+        tb = tbUser,
+        imt = imtClass
+    )
+
+fun AllDataUi.toAllData(): AllData =
+    AllData(
+        idData = id,
+        namaUser = nama,
+        jeniskUser = jenisk,
+        umurUser = umur,
+        bbUser = bb,
+        tbUser = tb,
+        imtClass = imt
+    )
+
+
 //untuk menampung data gabungan
 data class AllData(
     val idData: String,
@@ -60,8 +115,8 @@ data class AllData(
     val bbUser: Long,
     val tbUser: Long,
     val imtClass: String
-){
-    constructor(): this("","","","",0,0,"")
+) {
+    constructor() : this("", "", "", "", 0, 0, "")
 }
 
 

@@ -18,9 +18,13 @@ interface ImtRepository{
 
     suspend fun update(imt: Imt)
 
-    suspend fun delete(imtId: String)
+    suspend fun deleteBasedOnUserId(userId: String)
 
     fun getAllWithUser(): Flow<List<Pair<Imt,User?>>>
+
+    fun getAllBasedOnUserId(userId: String): Flow<Pair<Imt,User?>?>
+
+    fun getImtByUserId(userId: String) :Flow<Imt?>
 }
 
 class ImtRepositoryImpl(private val firestore: FirebaseFirestore): ImtRepository{
@@ -40,8 +44,16 @@ class ImtRepositoryImpl(private val firestore: FirebaseFirestore): ImtRepository
         firestore.collection("Imt").document(imt.idData).set(imt).await()
     }
 
-    override suspend fun delete(imtId: String) {
-        firestore.collection("Imt").document(imtId).delete().await()
+    override suspend fun deleteBasedOnUserId(userId: String) {
+        val imtSnapshot = firestore.collection("Imt").whereEqualTo("idUser", userId).get().await()
+        imtSnapshot.documents.forEach { document ->
+            document.reference.delete()
+        }
+
+        val userSnapshot = firestore.collection("User").whereEqualTo("idUser", userId).get().await()
+        userSnapshot.documents.forEach { document ->
+            document.reference.delete()
+        }
     }
 
     override fun getAllWithUser(): Flow<List<Pair<Imt, User?>>> = flow{
@@ -55,5 +67,38 @@ class ImtRepositoryImpl(private val firestore: FirebaseFirestore): ImtRepository
             val listResult = listImt.map { imt -> Pair(imt, listUser.find { it.idUser == imt.idUser }) }
             emit(listResult)
     }.flowOn(Dispatchers.IO)
+
+    override fun getAllBasedOnUserId(userId: String): Flow<Pair<Imt, User?>?> = flow {
+        val imtSnapshot = firestore.collection("Imt")
+            .whereEqualTo("idUser", userId)
+            .get()
+            .await()
+        val userSnapshot = firestore.collection("User")
+            .whereEqualTo("idUser", userId)
+            .get()
+            .await()
+
+        val imtResult = imtSnapshot.toObjects(Imt::class.java)
+        val userResult = userSnapshot.toObjects(User::class.java)
+
+        val imt = imtResult.firstOrNull()
+        val user = userResult.firstOrNull()
+
+        val result = if (imt != null) Pair(imt, user) else null
+
+        emit(result)
+    }.flowOn(Dispatchers.IO)
+
+    override fun getImtByUserId(userId: String): Flow<Imt?> {
+        return flow {
+            val snapshot = firestore.collection("Imt")
+                .whereEqualTo("idUser", userId)
+                .get()
+                .await()
+            val imt = snapshot.documents.firstOrNull()?.toObject(Imt::class.java)
+            emit(imt)
+        }.flowOn(Dispatchers.IO)
+    }
+
 
 }

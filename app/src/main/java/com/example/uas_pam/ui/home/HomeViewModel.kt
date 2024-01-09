@@ -32,7 +32,7 @@ class HomeViewModel(private val imtRepository: ImtRepository): ViewModel() {
             pairsList.mapNotNull { (imt, user) ->
                 if (user != null) {
                     AllData(
-                        idData = imt.idData,
+                        idData = user.idUser,
                         namaUser = user.namaUser,
                         jeniskUser = user.jeniskUser,
                         umurUser = user.umurUser,

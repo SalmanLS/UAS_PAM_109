@@ -14,12 +14,24 @@ data class DetailUser(
     val umur: String = ""
 )
 
-fun DetailUser.toUser(): User = User(
-    idUser = id,
-    namaUser = nama,
-    jeniskUser = jenisk,
-    umurUser = umur
-)
+fun DetailUser.toUser(): User =
+    User(
+        idUser = id,
+        namaUser = nama,
+        jeniskUser = jenisk,
+        umurUser = umur
+    )
 
+fun User.toDetailUser(): DetailUser =
+    DetailUser(
+        id = idUser,
+        nama = namaUser,
+        jenisk = jeniskUser,
+        umur = umurUser
+        )
+
+fun User.toUserUIState(): UserUIState = UserUIState(
+    detailUser = this.toDetailUser()
+)
 
 

@@ -1,5 +1,6 @@
 package com.example.uas_pam.ui.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -77,7 +78,7 @@ fun HomeScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize(),
-            onSiswaClick = onDetailClick
+            onDataClick = onDetailClick
         )
     }
 }
@@ -86,7 +87,7 @@ fun HomeScreen(
 fun BodyHome(
     itemAll: List<AllData>,
     modifier: Modifier = Modifier,
-    onSiswaClick: (String) -> Unit = {}
+    onDataClick: (String) -> Unit = {}
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -94,7 +95,7 @@ fun BodyHome(
     ) {
         if (itemAll.isEmpty()) {
             Text(
-                text = "Tidak ada data Kontak",
+                text = "Tidak ada data IMT",
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleLarge
             )
@@ -103,7 +104,7 @@ fun BodyHome(
                 itemAll = itemAll,
                 modifier = Modifier
                     .padding(horizontal = 8.dp),
-                onItemClick = {  }
+                onItemDataClick = {onDataClick(it.idData)}
             )
         }
     }
@@ -112,7 +113,7 @@ fun BodyHome(
 fun ListAll(
     itemAll: List<AllData>,
     modifier: Modifier = Modifier,
-    onItemClick: (AllData) -> Unit
+    onItemDataClick: (AllData) -> Unit
 ) {
     LazyColumn(
         modifier = modifier
@@ -122,6 +123,7 @@ fun ListAll(
                 allData = all,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clickable { onItemDataClick(all) }
             )
             Spacer(modifier = Modifier.padding(8.dp))
         }
