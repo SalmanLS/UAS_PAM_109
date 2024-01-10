@@ -15,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
@@ -153,39 +154,6 @@ fun FormInputUser(
             enabled = enabled,
             singleLine = true
         )
-//        OutlinedTextField(
-//            value = detailUser.jenisk,
-//            onValueChange = { onValueChange(detailUser.copy(jenisk = it)) },
-//            label = { Text("Jenis Kelamin") },
-//            modifier = Modifier.fillMaxWidth(),
-//            enabled = enabled,
-//            singleLine = true
-//        )
-
-        Text(text = "Jenis Kelamin :")
-        pilihanJk.forEach { item ->
-                Row(
-                    modifier = Modifier.selectable(
-                        selected = jenisk == item,
-                        onClick = {
-                            jenisk = item
-                            onValueChange(detailUser.copy(jenisk = item))
-                        }
-                    ),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    RadioButton(
-                        selected = jenisk == item,
-                        onClick = {
-                            jenisk = item
-                            onValueChange(detailUser.copy(jenisk = item))
-                        }
-                    )
-                    Text(item)
-                }
-
-        }
-
         OutlinedTextField(
             value = detailUser.umur,
             onValueChange = { onValueChange(detailUser.copy(umur = it)) },
@@ -195,6 +163,30 @@ fun FormInputUser(
             enabled = enabled,
             singleLine = true
         )
+        Text(text = "Jenis Kelamin :")
+        pilihanJk.forEach { item ->
+            Row(
+                modifier = Modifier.selectable(
+                    selected = jenisk == item,
+                    onClick = {
+                        jenisk = item
+                        onValueChange(detailUser.copy(jenisk = item))
+                    }
+                ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                RadioButton(
+                    selected = jenisk == item,
+                    onClick = {
+                        jenisk = item
+                        onValueChange(detailUser.copy(jenisk = item))
+                    }
+                )
+                Text(item)
+            }
+
+        }
+        Text(text = "IMT Classification Data :")
 
     }
 }
@@ -208,9 +200,14 @@ fun FormInputImt(
 ) {
     val image = painterResource(id = R.drawable.body)
 
-    Row {
+    OutlinedCard {
         Column(
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+
         ) {
             OutlinedTextField(
                 value = detailImt.tb.toString(),
@@ -220,8 +217,10 @@ fun FormInputImt(
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 label = { Text("Tinggi Badan") },
+
                 singleLine = true
             )
+            Image(painter = image, contentDescription = "", modifier = Modifier.size(200.dp))
             OutlinedTextField(
                 value = detailImt.bb.toString(),
                 onValueChange = {
@@ -234,7 +233,7 @@ fun FormInputImt(
             )
 
         }
-        Image(painter = image, contentDescription = "", modifier = Modifier.size(160.dp))
     }
+
 
 }

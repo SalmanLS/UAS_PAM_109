@@ -58,7 +58,7 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
             val kontakId = backStackEntry.arguments?.getString(DetailDestination.imtId)
             kontakId?.let {
                 DetailScreen(
-                    navigateBack = { navController.popBackStack() },
+                    navigateBack = { navController.navigate(DestinasiHome.route) },
                     navigateToEditItem = {
                         navController.navigate("${EditDestination.route}/$kontakId")
                         println("kontakId: $kontakId")

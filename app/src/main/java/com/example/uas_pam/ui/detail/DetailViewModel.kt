@@ -29,7 +29,7 @@ class DetailViewModel(
 
     val dataBasedOnUserId: Flow<AllData> = imtRepository.getAllBasedOnUserId(userId)
         .map { result ->
-            requireNotNull(result) { "Result cannot be null" }
+            requireNotNull(result) 
         }
         .map { (imt, user) ->
             AllData(
