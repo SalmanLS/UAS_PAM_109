@@ -110,6 +110,7 @@ fun BodyHome(
     modifier: Modifier = Modifier,
     onDataClick: (String) -> Unit = {}
 ) {
+    val image = painterResource(id = R.drawable.baseline_content_paste_off_24)
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -119,13 +120,22 @@ fun BodyHome(
             Card(
                 colors = CardDefaults.cardColors(Color.LightGray)
             ) {
-                Text(
-                    text = "The Data is Empty",
-                    fontFamily = FontFamily.Serif,
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(32.dp)
-                )
+                Column (
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
+                    Image(
+                        painter = image,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop
+                    )
+                    Text(
+                        text = "Nothing to see here, Please add the data first",
+                        fontFamily = FontFamily.Serif,
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(24.dp)
+                    )
+                }
             }
         } else {
             ListAll(
@@ -187,7 +197,9 @@ fun ListAll(
                 Card(
                     colors = CardDefaults.cardColors(Color.LightGray)
                 ) {
-                    Column(horizontalAlignment = Alignment.Start) {
+                    Column(
+                        modifier = Modifier.padding(8.dp),
+                        horizontalAlignment = Alignment.Start) {
                         Text(
                             text = allData.namaUser,
                             style = TextStyle(fontSize = 25.sp, fontFamily = FontFamily.Serif),
@@ -226,11 +238,3 @@ fun ListAll(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun HalamanHomePreview() {
-//    UAS_PAMTheme {
-//        HomeScreen(navigateToItemEntry = {})
-//    }
-//}
