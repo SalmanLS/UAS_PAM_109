@@ -15,6 +15,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.uas_pam.model.JenisKelamin.jk
 import com.example.uas_pam.navigation.PengelolaHalaman
 import com.example.uas_pam.ui.add.AddScreen
+import com.example.uas_pam.ui.home.HalamanFirst
+import com.example.uas_pam.ui.home.HomeScreen
 import com.example.uas_pam.ui.theme.UAS_PAMTheme
 
 class MainActivity : ComponentActivity() {
@@ -26,7 +28,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(color = Color(R.color.primaryColor)),
+                        .background(color = Color(R.color.green)),
                     color = MaterialTheme.colorScheme.background,
                 ) {
                     PengelolaHalaman()

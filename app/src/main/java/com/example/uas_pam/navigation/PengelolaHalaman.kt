@@ -17,8 +17,10 @@ import com.example.uas_pam.ui.edit.EditDestination
 import com.example.uas_pam.ui.edit.EditScreen
 import com.example.uas_pam.ui.home.DestinasiFirst
 import com.example.uas_pam.ui.home.DestinasiHome
+import com.example.uas_pam.ui.home.DestinasiMenu
 import com.example.uas_pam.ui.home.HalamanFirst
 import com.example.uas_pam.ui.home.HomeScreen
+import com.example.uas_pam.ui.home.HomeScreenMenu
 
 @Composable
 fun PengelolaHalaman(navController: NavHostController = rememberNavController()){
@@ -27,16 +29,23 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
         startDestination = DestinasiFirst.route,
         modifier = Modifier
     ){
+
         composable(
             DestinasiFirst.route
         ){
-            HalamanFirst(onNextButtonClicked = {navController.navigate(DestinasiHome.route)})
+            HalamanFirst(onNextButtonClicked = {navController.navigate(DestinasiMenu.route)})
+        }
+        composable(DestinasiMenu.route){
+            HomeScreenMenu(
+                onAddClick = { navController.navigate(DestinasiAdd.route) },
+                onViewClick = { navController.navigate(DestinasiHome.route)}
+            )
         }
         composable(
             DestinasiHome.route
         ){
             HomeScreen(
-                navigateToItemEntry = { navController.navigate(DestinasiAdd.route) },
+                navigateBack = { navController.navigate(DestinasiMenu.route) },
                 onDetailClick = { itemId ->
                     navController.navigate("${DetailDestination.route}/$itemId")
                     println("itemId: $itemId")

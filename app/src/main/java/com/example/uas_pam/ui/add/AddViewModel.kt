@@ -1,5 +1,6 @@
 package com.example.uas_pam.ui.add
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -17,6 +18,7 @@ class AddViewModel(private val userRepository: UserRepository, private val imtRe
     var uiStateUser by mutableStateOf(UserUIState())
     var uiStateImt by mutableStateOf(ImtUIState())
     private var userID : String = ""
+
 
     fun updateUiStateUser(detailUser: DetailUser){
         uiStateUser = UserUIState(detailUser = detailUser)

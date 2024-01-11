@@ -1,5 +1,8 @@
 package com.example.uas_pam.ui.edit
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -9,8 +12,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.uas_pam.PenyediaViewModel
+import com.example.uas_pam.R
 import com.example.uas_pam.navigation.DestinasiNavigasi
 import com.example.uas_pam.ui.ImtTopAppBar
 import com.example.uas_pam.ui.add.AddBody
@@ -45,6 +51,14 @@ fun EditScreen(
         },
         modifier = modifier
     ) { innerPadding ->
+        Box(modifier = Modifier.fillMaxSize()) {
+            Image(
+                painter = painterResource(id = R.drawable.back),
+                contentDescription = "",
+                contentScale = ContentScale.FillBounds,
+                modifier = Modifier.matchParentSize()
+            )
+        }
         AddBody(
             userUIState = viewModel.userUiState,
             onUserValueChange = viewModel::updateUiStateUser,

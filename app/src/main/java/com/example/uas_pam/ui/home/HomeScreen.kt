@@ -5,11 +5,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -37,15 +39,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.uas_pam.PenyediaViewModel
 import com.example.uas_pam.R
 import com.example.uas_pam.navigation.DestinasiNavigasi
 import com.example.uas_pam.ui.AllData
 import com.example.uas_pam.ui.ImtTopAppBar
+import com.example.uas_pam.ui.theme.UAS_PAMTheme
 
 object DestinasiHome : DestinasiNavigasi {
     override val route = "home_"
@@ -56,7 +66,7 @@ object DestinasiHome : DestinasiNavigasi {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    navigateToItemEntry: () -> Unit,
+    navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     onDetailClick: (String) -> Unit = {},
     viewModel: HomeViewModel = viewModel(factory = PenyediaViewModel.Factory)
@@ -67,37 +77,23 @@ fun HomeScreen(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             ImtTopAppBar(
-                title = "Imt Application",
-                canNavigateBack = false,
+                title = "Body Mass Index",
+                canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
+                navigateUp = navigateBack
             )
-        },
-        floatingActionButton = {
-            Row {
-                FloatingActionButton(
-                    onClick = navigateToItemEntry,
-                    shape = MaterialTheme.shapes.medium,
-                    modifier = Modifier.padding(18.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = ""
-                    )
-                }
-//                FloatingActionButton(
-//                    onClick = { viewModel.triggerRefresh() },
-//                    shape = MaterialTheme.shapes.medium,
-//                    modifier = Modifier.padding(18.dp)
-//                    ) {
-//                    Icon(
-//                        imageVector = Icons.Default.Refresh,
-//                        contentDescription = ""
-//                    )
-//                }
-            }
         },
     ) { innerPadding ->
         val uiStateData by viewModel.homeUIState.collectAsState()
+
+        Box(modifier = Modifier.fillMaxSize()) {
+            Image(
+                painter = painterResource(id = R.drawable.back),
+                contentDescription = "",
+                contentScale = ContentScale.FillBounds,
+                modifier = Modifier.matchParentSize()
+            )
+        }
         BodyHome(
             itemAll = uiStateData.alldata,
             modifier = Modifier
@@ -116,14 +112,21 @@ fun BodyHome(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
         modifier = modifier
     ) {
         if (itemAll.isEmpty()) {
-            Text(
-                text = "Tidak ada data IMT",
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleLarge
-            )
+            Card(
+                colors = CardDefaults.cardColors(Color.LightGray)
+            ) {
+                Text(
+                    text = "The Data is Empty",
+                    fontFamily = FontFamily.Serif,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(32.dp)
+                )
+            }
         } else {
             ListAll(
                 itemAll = itemAll,
@@ -157,7 +160,6 @@ fun ListAll(
 }
 
 
-
 @Composable
 fun ListAll(
     allData: AllData,
@@ -165,47 +167,70 @@ fun ListAll(
 ) {
     val image = painterResource(id = R.drawable.baseline_person_24)
     Card(
-        modifier = modifier,
+        modifier = modifier.padding(8.dp),
         shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        colors = CardDefaults.cardColors(Color.LightGray)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(30.dp)
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Column (
-                ){
-                    Text(text = allData.namaUser, style = MaterialTheme.typography.titleLarge)
-                    Text(text = allData.umurUser + " Tahun", style = MaterialTheme.typography.titleMedium)
-                    Text(text = allData.jeniskUser, style = MaterialTheme.typography.titleMedium)
-                }
-
-                Spacer(Modifier.weight(2f))
-                Image(
-                    painter = image,
-                    contentDescription = "",
-                    modifier.size(120.dp)
-                )
-
-            }
-            Card {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(20.dp)
+                Image(painter = image, contentDescription = "")
+                Card(
+                    colors = CardDefaults.cardColors(Color.LightGray)
                 ) {
-                    Text(text = "TB: " + allData.tbUser.toString() + " cm", style = MaterialTheme.typography.titleMedium)
-                    Spacer(Modifier.weight(1f))
-                    Text(text = "BB: " + allData.bbUser.toString() + " kg", style = MaterialTheme.typography.titleMedium)
-                    Spacer(Modifier.weight(1f))
-                    Text(text = "IMT: " + allData.imtClass, style = MaterialTheme.typography.titleMedium)
-                    Spacer(Modifier.weight(1f))
+                    Column(horizontalAlignment = Alignment.Start) {
+                        Text(
+                            text = allData.namaUser,
+                            style = TextStyle(fontSize = 25.sp, fontFamily = FontFamily.Serif),
+                        )
+                        Text(
+                            text = allData.umurUser + " Tahun",
+                            style = TextStyle(fontFamily = FontFamily.Serif),
+                        )
+                        Text(
+                            text = allData.jeniskUser,
+                            style = TextStyle(fontFamily = FontFamily.Serif),
+                        )
+                    }
                 }
+
             }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                Text(
+                    text = "TB: " + allData.tbUser.toString() + " cm",
+                    style = TextStyle(fontFamily = FontFamily.Serif),
+                )
+                Text(
+                    text = "BB: " + allData.bbUser.toString() + " kg",
+                    style = TextStyle(fontFamily = FontFamily.Serif),
+                )
+                Text(
+                    text = "IMT: " + allData.imtClass,
+                    style = TextStyle(fontFamily = FontFamily.Serif),
+                )
+            }
+
         }
     }
 }
+
+//@Preview(showBackground = true)
+//@Composable
+//fun HalamanHomePreview() {
+//    UAS_PAMTheme {
+//        HomeScreen(navigateToItemEntry = {})
+//    }
+//}

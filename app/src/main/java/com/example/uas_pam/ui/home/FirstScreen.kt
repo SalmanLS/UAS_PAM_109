@@ -2,7 +2,9 @@ package com.example.uas_pam.ui.home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -27,10 +30,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.uas_pam.Greeting
 import com.example.uas_pam.R
 import com.example.uas_pam.navigation.DestinasiNavigasi
+import com.example.uas_pam.ui.theme.UAS_PAMTheme
 
 object DestinasiFirst : DestinasiNavigasi {
     override val route = "first_"
@@ -41,14 +47,20 @@ object DestinasiFirst : DestinasiNavigasi {
 fun HalamanFirst(
     onNextButtonClicked: () -> Unit
 ) {
-    val image = painterResource(id = R.drawable.nutrisi)
-    Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween, horizontalAlignment = Alignment.CenterHorizontally) {
-        Card(
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+    val image = painterResource(id = R.drawable.gambar)
+    Box(modifier = Modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(id = R.drawable.back),
+            contentDescription = "",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.matchParentSize()
+        )
+        Column(
             modifier = Modifier
-                .fillMaxWidth(0.95f)
-                .padding(vertical = 50.dp)
-                .align(Alignment.CenterHorizontally)
+                .fillMaxHeight()
+                .padding(20.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -61,30 +73,41 @@ fun HalamanFirst(
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
-                    text = "IMT APPLICATION",
+                    text = "BMI APPLICATION",
                     color = Color.DarkGray,
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = FontFamily.Serif,
                     fontStyle = FontStyle.Normal,
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold
                 )
 
             }
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(dimensionResource(R.dimen.padding_medium))
-                .weight(1f, false),
-            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
-            verticalAlignment = Alignment.Bottom
-        ) {
-            Button(
-                modifier = Modifier.weight(1f),
-                onClick = onNextButtonClicked
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(R.dimen.padding_medium))
+                    .weight(1f, false),
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
+                verticalAlignment = Alignment.Bottom
             ) {
-                Text("Get Started")
+                Button(
+                    modifier = Modifier
+                        .weight(1f),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray),
+                    onClick = onNextButtonClicked
+                ) {
+                    Text("Get Started", fontFamily = FontFamily.Serif, color = Color.Black)
+                }
             }
         }
+
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HalamanFirstPreview() {
+    UAS_PAMTheme {
+        HalamanFirst(onNextButtonClicked = {})
     }
 }

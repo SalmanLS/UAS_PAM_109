@@ -2,8 +2,10 @@ package com.example.uas_pam.ui.add
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -13,6 +15,9 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
@@ -29,8 +34,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -73,7 +81,14 @@ fun AddScreen(
             )
         }
     ) { innerPadding ->
-
+        Box(modifier = Modifier.fillMaxSize()) {
+            Image(
+                painter = painterResource(id = R.drawable.back),
+                contentDescription = "",
+                contentScale = ContentScale.FillBounds,
+                modifier = Modifier.matchParentSize()
+            )
+        }
         AddBody(
             userUIState = addViewModel.uiStateUser,
             onUserValueChange = addViewModel::updateUiStateUser,
@@ -125,9 +140,10 @@ fun AddBody(
         Button(
             onClick = onSaveClick,
             shape = MaterialTheme.shapes.small,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(Color.LightGray)
         ) {
-            Text("Submit")
+            Text("Submit", fontFamily = FontFamily.Serif, color = Color.Black)
         }
     }
 }
@@ -141,52 +157,60 @@ fun FormInputUser(
     onValueChange: (DetailUser) -> Unit = {},
     enabled: Boolean = true
 ) {
-    var jenisk by rememberSaveable { mutableStateOf("") }
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        OutlinedTextField(
-            value = detailUser.nama,
-            onValueChange = { onValueChange(detailUser.copy(nama = it)) },
-            label = { Text("Nama") },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
-        OutlinedTextField(
-            value = detailUser.umur,
-            onValueChange = { onValueChange(detailUser.copy(umur = it)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            label = { Text(text = "Umur") },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
-        Text(text = "Jenis Kelamin :")
-        pilihanJk.forEach { item ->
-            Row(
-                modifier = Modifier.selectable(
-                    selected = jenisk == item,
-                    onClick = {
-                        jenisk = item
-                        onValueChange(detailUser.copy(jenisk = item))
-                    }
-                ),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                RadioButton(
-                    selected = jenisk == item,
-                    onClick = {
-                        jenisk = item
-                        onValueChange(detailUser.copy(jenisk = item))
-                    }
-                )
-                Text(item)
-            }
+    var  jenisk by rememberSaveable { mutableStateOf("") }
+    Text(text = "Person Data:", fontFamily = FontFamily.Serif)
+    Card (
+        colors = CardDefaults.cardColors(Color.LightGray)
+    ){
+        Column(
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+        ) {
+            OutlinedTextField(
+                value = detailUser.nama,
+                onValueChange = { onValueChange(detailUser.copy(nama = it)) },
+                label = { Text("Nama", fontFamily = FontFamily.Serif) },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = enabled,
+                singleLine = true,
+            )
+            OutlinedTextField(
+                value = detailUser.umur,
+                onValueChange = { onValueChange(detailUser.copy(umur = it)) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                label = { Text(text = "Umur", fontFamily = FontFamily.Serif) },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = enabled,
+                singleLine = true
+            )
+            Text(text = "Jenis Kelamin :", fontFamily = FontFamily.Serif)
+            pilihanJk.forEach { item ->
+                Row(
+                    modifier = Modifier.selectable(
+                        selected = jenisk == item,
+                        onClick = {
+                            jenisk = item
+                            onValueChange(detailUser.copy(jenisk = item))
+                        }
+                    ),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(
+                        selected = jenisk == item,
+                        onClick = {
+                            jenisk = item
+                            onValueChange(detailUser.copy(jenisk = item))
+                        }
+                    )
+                    Text(item)
+                }
 
-        }
-        Text(text = "IMT Classification Data :")
+            }
+    }
+
+
 
     }
 }
@@ -199,8 +223,10 @@ fun FormInputImt(
     onValueChange: (DetailImt) -> Unit = {},
 ) {
     val image = painterResource(id = R.drawable.body)
-
-    OutlinedCard {
+    Text(text = "BMI Classification Data :", fontFamily = FontFamily.Serif)
+    Card (
+        colors = CardDefaults.cardColors(Color.LightGray)
+    ){
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -216,7 +242,7 @@ fun FormInputImt(
                     onValueChange(detailImt.copy(tb = newValue))
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                label = { Text("Tinggi Badan") },
+                label = { Text("Tinggi Badan dalam CM",fontFamily = FontFamily.Serif) },
 
                 singleLine = true
             )
@@ -228,8 +254,8 @@ fun FormInputImt(
                     onValueChange(detailImt.copy(bb = newValue))
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                label = { Text("Berat Badan") },
-                singleLine = true
+                label = { Text("Berat Badan dalam KG", fontFamily = FontFamily.Serif) },
+                singleLine = true,
             )
 
         }
