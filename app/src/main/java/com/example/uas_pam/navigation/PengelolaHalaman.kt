@@ -55,7 +55,7 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
         composable(
             DestinasiAdd.route
         ){
-            AddScreen(navigateBack = {navController.popBackStack()}, pilihanJk = jk)
+            AddScreen(navigateBack = {navController.navigate(DestinasiHome.route)}, pilihanJk = jk)
         }
 
         composable(
@@ -71,7 +71,8 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
                     navigateToEditItem = {
                         navController.navigate("${EditDestination.route}/$kontakId")
                         println("kontakId: $kontakId")
-                    }
+                    },
+                    navigateToMenu = {navController.navigate(DestinasiMenu.route)}
                 )
             }
         }

@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -67,6 +68,7 @@ object DetailDestination : DestinasiNavigasi {
 @Composable
 fun DetailScreen(
     navigateToEditItem: (String) -> Unit,
+    navigateToMenu: () -> Unit,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DetailViewModel = viewModel(factory = PenyediaViewModel.Factory)
@@ -97,6 +99,13 @@ fun DetailScreen(
                     onClick = { navigateToEditItem(uiState.value.allDataUi.id) },
                     icon = { Icon(Icons.Filled.Edit, "") },
                     text = { Text(text = "Edit", fontFamily = FontFamily.Serif) },
+                    containerColor = Color.LightGray
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                ExtendedFloatingActionButton(
+                    onClick = { navigateToMenu() },
+                    icon = { Icon(Icons.Filled.Home, "") },
+                    text = { Text(text = "Menu", fontFamily = FontFamily.Serif) },
                     containerColor = Color.LightGray
                 )
             }
@@ -240,10 +249,10 @@ private fun DeleteConfirmationDialog(
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DetailScreenPreview() {
-    UAS_PAMTheme {
-        DetailScreen(navigateToEditItem = {} , navigateBack = { /*TODO*/ })
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun DetailScreenPreview() {
+//    UAS_PAMTheme {
+//        DetailScreen(navigateToEditItem = {} , navigateBack = { /*TODO*/ })
+//    }
+//}
