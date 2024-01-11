@@ -67,6 +67,7 @@ fun Imt.toImtUIState(): ImtUIState = ImtUIState(
     detailImt = this.toDetailImt()
 )
 
+//untuk menampung data gabungan
 data class DetailUIState(
     val allDataUi: AllDataUi = AllDataUi()
 )
@@ -106,7 +107,7 @@ fun AllDataUi.toAllData(): AllData =
     )
 
 
-//untuk menampung data gabungan
+
 data class AllData(
     val idData: String,
     val namaUser: String,
