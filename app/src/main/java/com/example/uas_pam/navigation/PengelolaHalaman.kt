@@ -55,7 +55,11 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
         composable(
             DestinasiAdd.route
         ){
-            AddScreen(navigateBack = {navController.navigate(DestinasiHome.route)}, pilihanJk = jk)
+            AddScreen(
+                navigateBack = {navController.navigate(DestinasiHome.route)},
+                navigateBackMenu = {navController.navigate((DestinasiMenu.route))},
+                pilihanJk = jk
+            )
         }
 
         composable(

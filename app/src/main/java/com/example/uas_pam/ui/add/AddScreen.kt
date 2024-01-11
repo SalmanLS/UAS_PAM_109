@@ -62,6 +62,7 @@ object DestinasiAdd : DestinasiNavigasi {
 @Composable
 fun AddScreen(
     navigateBack: () -> Unit,
+    navigateBackMenu: () -> Unit,
     modifier: Modifier = Modifier,
     addViewModel: AddViewModel = viewModel(factory = PenyediaViewModel.Factory),
     pilihanJk: List<String>
@@ -77,7 +78,7 @@ fun AddScreen(
                 title = DestinasiAdd.titleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
-                navigateUp = navigateBack
+                navigateUp = navigateBackMenu
             )
         }
     ) { innerPadding ->

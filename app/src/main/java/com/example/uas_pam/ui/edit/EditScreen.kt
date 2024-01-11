@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 
 object EditDestination : DestinasiNavigasi {
     override val route = "item_edit"
-    override val titleRes ="Edit Imt"
+    override val titleRes ="Edit Data"
     const val imtId = "itemId"
     val routeWithArgs = "$route/{$imtId}"
 }
